@@ -7,17 +7,22 @@
 
 import React from 'react';
 import Login from './src/screens/Auth/Login';
-// import { StatusBar, View } from 'react-native';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { Provider as ReduxProvider } from "react-redux";
-// import { PersistGate } from "redux-persist/integration/react";
-// import MainStack from './src/navigation/MainStack';
-// import { persistor, store } from './src/redux/store';
+
+import { StatusBar, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { Provider as ReduxProvider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import MainStack from './src/navigation/MainStack';
+import { persistor, store } from './src/redux/store';
+import Register from './src/screens/Auth/Register';
 
 function App(): React.JSX.Element {
 
   return (
-    <Login/>
+
+<View style={{flex:1}}>
+<Register/>
+</View>
     // <ReduxProvider store={store}>
     //   <PersistGate loading={null} persistor={persistor}>
     //     <NavigationContainer>

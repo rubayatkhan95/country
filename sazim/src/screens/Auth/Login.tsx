@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 const Login = () => {
     const [email, setEmail] = useState<string>('');
@@ -8,44 +8,11 @@ const Login = () => {
     const [emailError, setEmailError] = useState<string>('');
     const [passwordError, setPasswordError] = useState<string>('');
     const [error, setError] = useState<string>('');
-     const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
-    // const handleLogin = () => {
-    //     setError('');
-    //     if (!email.trim()) {
-    //         setEmailError('Email cannot be empty');
-    //         return;
-    //     }
-    //     else if (!validateEmail(email)) {
-    //         setEmailError('Please enter a valid email address');
-    //         return;
-    //     } else {
-    //         setEmailError('');
-    //     }
-
-    //     if (!password.trim()) {
-
-    //         setPasswordError('Password cannot be empty');
-    //         return;
-    //     } else {
-    //         setPasswordError('');
-    //     }
-
-    //     if (email === 'test@example.com' && password === 'password') {
-    //         setLoading(true);
-    //         setTimeout(() => {
-    //             setLoading(false);
-    //             console.log('Login successful');
-    //             // Navigate to the next screen or perform post-login actions
-    //         }, 1000);
-    //     } else {
-    //         setEmailError('')
-    //         setPasswordError('')
-    //         setError('Invalid email or password');
-    //     }
-
-
-    // };
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    };
 
     const handleLogin = async () => {
         setError('');
@@ -103,45 +70,47 @@ const Login = () => {
     };
 
     return (
-        <View style={styles.container}>
-            {/* Headline */}
-            <Text style={styles.headline}>SIGN IN</Text>
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+            <View style={styles.container}>
+                {/* Headline */}
+                <Text style={styles.headline}>SIGN IN</Text>
 
-            {/* Email Input */}
-            <TextInput
-                style={getInputStyle(!!emailError)}
-                placeholder="Enter your email"
-                placeholderTextColor="#aaa"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-            />
-            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+                {/* Email Input */}
+                <TextInput
+                    style={getInputStyle(!!emailError)}
+                    placeholder="Enter your email"
+                    placeholderTextColor="#aaa"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                />
+                {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
-            {/* Password Input */}
-            <TextInput
-                style={getInputStyle(!!passwordError)}
-                placeholder="Enter your password"
-                placeholderTextColor="#aaa"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-            {error ? <Text style={styles.errorText}>{error}</Text> : null}
-            {/* Login Button */}
-            <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-              <Text style={styles.buttonText}>{loading ? 'Logging in...' : 'LOGIN'}</Text>
-          </TouchableOpacity>
-
-            {/* Signup link */}
-            <View style={styles.signupContainer}>
-                <Text style={styles.signupText}>Don't have an account? </Text>
-                <TouchableOpacity>
-                    <Text style={styles.signupLink}>Sign Up</Text>
+                {/* Password Input */}
+                <TextInput
+                    style={getInputStyle(!!passwordError)}
+                    placeholder="Enter your password"
+                    placeholderTextColor="#aaa"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                />
+                {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+                {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                {/* Login Button */}
+                <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+                    <Text style={styles.buttonText}>{loading ? 'Logging in...' : 'LOGIN'}</Text>
                 </TouchableOpacity>
-            </View>
-        </View>
+
+                {/* Signup link */}
+                <View style={styles.signupContainer}>
+                    <Text style={styles.signupText}>Don't have an account? </Text>
+                    <TouchableOpacity>
+                        <Text style={styles.signupLink}>Sign Up</Text>
+                    </TouchableOpacity>
+                </View>
+            </View></TouchableWithoutFeedback>
+
     );
 };
 
@@ -204,7 +173,7 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 14,
         marginTop: -10,
-        marginBottom:20,
+        marginBottom: 20,
 
     },
 });

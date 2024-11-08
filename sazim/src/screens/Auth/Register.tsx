@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, StyleSheet, Image, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 
 const Register = () => {
@@ -37,6 +37,10 @@ const Register = () => {
         return regex.test(email);
     };
 
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    };
+
     const handleRegister = async () => {
         if (validateFields()) {
             try {
@@ -63,98 +67,102 @@ const Register = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.headline}>SIGN UP</Text>
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+            <View style={styles.container}>
+                <Text style={styles.headline}>SIGN UP</Text>
 
-            <TextInput
-                style={getInputStyle(!!errors.firstName)}
-                placeholder="First Name"
-                placeholderTextColor="#aaa"
-                value={firstName}
-                onChangeText={setFirstName}
-            />
-            {errors.firstName ? <Text style={styles.errorText}>{errors.firstName}</Text> : null}
-
-            <TextInput
-                style={getInputStyle(!!errors.lastName)}
-                placeholder="Last Name"
-                placeholderTextColor="#aaa"
-                value={lastName}
-                onChangeText={setLastName}
-            />
-            {errors.lastName ? <Text style={styles.errorText}>{errors.lastName}</Text> : null}
-
-            <TextInput
-                style={getInputStyle(!!errors.address)}
-                placeholder="Address"
-                placeholderTextColor="#aaa"
-                value={address}
-                onChangeText={setAddress}
-            />
-            {errors.address ? <Text style={styles.errorText}>{errors.address}</Text> : null}
-
-            <TextInput
-                style={getInputStyle(!!errors.email)}
-                placeholder="Email"
-                placeholderTextColor="#aaa"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-            />
-            {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
-
-            <TextInput
-                style={getInputStyle(!!errors.phone)}
-                placeholder="Phone Number"
-                placeholderTextColor="#aaa"
-                value={phone}
-                onChangeText={setPhone}
-                keyboardType="phone-pad"
-            />
-            {errors.phone ? <Text style={styles.errorText}>{errors.phone}</Text> : null}
-
-
-            <View style={styles.passwordInputContainer}>
                 <TextInput
-                    style={[getInputStyle(!!errors.password), styles.passwordInput]}
-                    placeholder="Password"
+                    style={getInputStyle(!!errors.firstName)}
+                    placeholder="First Name"
                     placeholderTextColor="#aaa"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry={!passwordVisible}
+                    value={firstName}
+                    onChangeText={setFirstName}
                 />
-                <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
-                    <Text style={styles.toggleText}>{passwordVisible ? 'Hide' : 'Show'}</Text>
-                </TouchableOpacity>
-            </View>
-            {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
+                {errors.firstName ? <Text style={styles.errorText}>{errors.firstName}</Text> : null}
 
-            <View style={styles.passwordInputContainer}>
                 <TextInput
-                    style={[getInputStyle(!!errors.confirmPassword), styles.passwordInput]}
-                    placeholder="Confirm Password"
+                    style={getInputStyle(!!errors.lastName)}
+                    placeholder="Last Name"
                     placeholderTextColor="#aaa"
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                    secureTextEntry={!confirmPasswordVisible}  // Add this line
+                    value={lastName}
+                    onChangeText={setLastName}
                 />
-                <TouchableOpacity onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
-                    <Text style={styles.toggleText}>{confirmPasswordVisible ? 'Hide' : 'Show'}</Text>
+                {errors.lastName ? <Text style={styles.errorText}>{errors.lastName}</Text> : null}
+
+                <TextInput
+                    style={getInputStyle(!!errors.address)}
+                    placeholder="Address"
+                    placeholderTextColor="#aaa"
+                    value={address}
+                    onChangeText={setAddress}
+                />
+                {errors.address ? <Text style={styles.errorText}>{errors.address}</Text> : null}
+
+                <TextInput
+                    style={getInputStyle(!!errors.email)}
+                    placeholder="Email"
+                    placeholderTextColor="#aaa"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                />
+                {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
+
+                <TextInput
+                    style={getInputStyle(!!errors.phone)}
+                    placeholder="Phone Number"
+                    placeholderTextColor="#aaa"
+                    value={phone}
+                    onChangeText={setPhone}
+                    keyboardType="phone-pad"
+                />
+                {errors.phone ? <Text style={styles.errorText}>{errors.phone}</Text> : null}
+
+
+                <View style={styles.passwordInputContainer}>
+                    <TextInput
+                        style={[getInputStyle(!!errors.password), styles.passwordInput]}
+                        placeholder="Password"
+                        placeholderTextColor="#aaa"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry={!passwordVisible}
+                    />
+                    <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+                        <Text style={styles.toggleText}>{passwordVisible ? 'Hide' : 'Show'}</Text>
+                    </TouchableOpacity>
+                </View>
+                {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
+
+                <View style={styles.passwordInputContainer}>
+                    <TextInput
+                        style={[getInputStyle(!!errors.confirmPassword), styles.passwordInput]}
+                        placeholder="Confirm Password"
+                        placeholderTextColor="#aaa"
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                        secureTextEntry={!confirmPasswordVisible}  // Add this line
+                    />
+                    <TouchableOpacity onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
+                        <Text style={styles.toggleText}>{confirmPasswordVisible ? 'Hide' : 'Show'}</Text>
+                    </TouchableOpacity>
+                </View>
+                {errors.confirmPassword ? <Text style={styles.errorText}>{errors.confirmPassword}</Text> : null}
+
+                <TouchableOpacity style={styles.button} onPress={handleRegister}>
+                    <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
-            </View>
-            {errors.confirmPassword ? <Text style={styles.errorText}>{errors.confirmPassword}</Text> : null}
 
-            <TouchableOpacity style={styles.button} onPress={handleRegister}>
-                <Text style={styles.buttonText}>Register</Text>
-            </TouchableOpacity>
-
-            <View style={styles.signupContainer}>
-                <Text style={styles.signupText}>Already have an account? </Text>
-                {/* <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.signupLink}>Sign In</Text>
-                </TouchableOpacity> */}
+                <View style={styles.signupContainer}>
+                    <Text style={styles.signupText}>Already have an account? </Text>
+                    <TouchableOpacity
+                    //  onPress={() => navigation.navigate('Login')}
+                    >
+                        <Text style={styles.signupLink}>Sign In</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
     );
 };
 

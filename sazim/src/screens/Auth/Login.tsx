@@ -1,5 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
 const Login = () => {
     const [email, setEmail] = useState<string>('');
@@ -9,41 +10,87 @@ const Login = () => {
     const [error, setError] = useState<string>('');
      const [loading, setLoading] = useState<boolean>(false);
 
-    const handleLogin = () => {
+    // const handleLogin = () => {
+    //     setError('');
+    //     if (!email.trim()) {
+    //         setEmailError('Email cannot be empty');
+    //         return;
+    //     }
+    //     else if (!validateEmail(email)) {
+    //         setEmailError('Please enter a valid email address');
+    //         return;
+    //     } else {
+    //         setEmailError('');
+    //     }
+
+    //     if (!password.trim()) {
+
+    //         setPasswordError('Password cannot be empty');
+    //         return;
+    //     } else {
+    //         setPasswordError('');
+    //     }
+
+    //     if (email === 'test@example.com' && password === 'password') {
+    //         setLoading(true);
+    //         setTimeout(() => {
+    //             setLoading(false);
+    //             console.log('Login successful');
+    //             // Navigate to the next screen or perform post-login actions
+    //         }, 1000);
+    //     } else {
+    //         setEmailError('')
+    //         setPasswordError('')
+    //         setError('Invalid email or password');
+    //     }
+
+
+    // };
+
+    const handleLogin = async () => {
         setError('');
+        setEmailError('');
+        setPasswordError('');
+
+        // Validate email
         if (!email.trim()) {
             setEmailError('Email cannot be empty');
             return;
-        }
-        else if (!validateEmail(email)) {
+        } else if (!validateEmail(email)) {
             setEmailError('Please enter a valid email address');
             return;
-        } else {
-            setEmailError('');
         }
 
+        // Validate password
         if (!password.trim()) {
-
             setPasswordError('Password cannot be empty');
             return;
-        } else {
-            setPasswordError('');
         }
 
-        if (email === 'test@example.com' && password === 'password') {
-            setLoading(true);
-            setTimeout(() => {
-                setLoading(false);
-                console.log('Login successful');
-                // Navigate to the next screen or perform post-login actions
-            }, 1000);
-        } else {
-            setEmailError('')
-            setPasswordError('')
-            setError('Invalid email or password');
+        // Check AsyncStorage for stored user data
+        try {
+            const storedUser = await AsyncStorage.getItem('user');
+            if (storedUser) {
+                const user = JSON.parse(storedUser);
+
+                // Check if the email and password match the stored user
+                if (user.email === email && user.password === password) {
+                    setLoading(true);
+                    setTimeout(() => {
+                        setLoading(false);
+                        Alert.alert('Login successful');
+                        // Navigate to the next screen or perform post-login actions
+                    }, 1000);
+                } else {
+                    setError('Invalid email or password');
+                }
+            } else {
+                setError('No user found. Please register first');
+            }
+        } catch (error) {
+            console.error(error);
+            setError('Failed to retrieve user data');
         }
-
-
     };
 
     const validateEmail = (email: string) => {
@@ -58,7 +105,7 @@ const Login = () => {
     return (
         <View style={styles.container}>
             {/* Headline */}
-            <Text style={styles.headline}>Sign In</Text>
+            <Text style={styles.headline}>SIGN IN</Text>
 
             {/* Email Input */}
             <TextInput
@@ -84,7 +131,7 @@ const Login = () => {
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
             {/* Login Button */}
             <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-              <Text style={styles.buttonText}>{loading ? 'Logging in...' : 'Login'}</Text>
+              <Text style={styles.buttonText}>{loading ? 'Logging in...' : 'LOGIN'}</Text>
           </TouchableOpacity>
 
             {/* Signup link */}
@@ -109,7 +156,6 @@ const styles = StyleSheet.create({
     },
     headline: {
         fontSize: 32,
-        fontWeight: 'bold',
         marginBottom: 40,
         color: '#4B0082',
     },

@@ -1,5 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 
 
 const Register = () => {
@@ -36,10 +37,24 @@ const Register = () => {
         return regex.test(email);
     };
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         if (validateFields()) {
-            console.log('Registration successful');
-            // Proceed with the registration process, or API call
+            try {
+                // Store user data
+                const userData = {
+                    firstName,
+                    lastName,
+                    address,
+                    email,
+                    phone,
+                    password,
+                };
+                await AsyncStorage.setItem('user', JSON.stringify(userData));
+                Alert.alert('Success', 'Registration successful');
+            } catch (error) {
+                console.error(error);
+                Alert.alert('Error', 'Failed to save user data');
+            }
         }
     };
 
@@ -49,7 +64,7 @@ const Register = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.headline}>Register</Text>
+            <Text style={styles.headline}>SIGN UP</Text>
 
             <TextInput
                 style={getInputStyle(!!errors.firstName)}
@@ -153,7 +168,6 @@ const styles = StyleSheet.create({
     },
     headline: {
         fontSize: 32,
-        fontWeight: 'bold',
         marginBottom: 40,
         color: '#4B0082',
     },
